@@ -79,3 +79,20 @@ Formadas por un sustantivo o frases de sustantivo.
 ¿Cómo exactamente esta clase realiza cierta tarea?
 ¿Hay algo específico sobre su ubicación?
 ```
+
+## Parámetros y argumentos
+Cuando nosotros definimos una función, podemos añadirle PARÁMETROS es lo que se le llamaa lo que 
+que va dentro de los paréntesis de la función. Ejmp.  
+```
+function sendEmail(toWhom: string): boolean{
+    ....
+}
+
+Entonces, el toWhom sería llamado PARÁMETRO
+```
+Pero, cuando nosotros ya usamos dicha función nosotros mandamos ARGUMENTOS. Ejmpl. 
+```
+sendEmail('martin@google.com');
+Entonces, quí el valor que le pasamos se llama ARGUMENTO
+```
+Se recomienda limitar a 3 parámetros
