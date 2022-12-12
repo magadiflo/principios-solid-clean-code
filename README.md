@@ -68,3 +68,14 @@ const birthDate = new Date('August 15, 1965 00:00:00');
 ```
 Verbo + sustantivo, ejmp: createUser(), updateUser(), sendEmail(), etc..
 ```
+
+## Nombre de una clase
+```
+Formadas por un sustantivo o frases de sustantivo.
+```
+3 Preguntas para determinar saber si es un buen nombre de clase:
+```
+¿Qué exactamente hace la clase?
+¿Cómo exactamente esta clase realiza cierta tarea?
+¿Hay algo específico sobre su ubicación?
+```
