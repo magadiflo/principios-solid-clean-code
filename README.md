@@ -53,3 +53,13 @@ Usualmente para que una refactorización fuerte tenga el objetivo esperado, es i
 ## Clean Code
 - "Código Limpio es aquel que se ha escrito con la intención de que otra persona (o tú mismo en el futuro) lo entienda" - Carlos Blé.
 - "Nuestro código tiene que ser simple y directo, debería leerse con la misma facilidad que un texto bien escrito" - Grady Booch.
+
+---
+## Nombre pronunciables y expresivos
+- Los nombres de las variables deberían estar escritas en inglés y ser pronunciables.
+```
+const numberOfUnits = 53;
+const tax = 0.18;
+const category = 'T-Shits';
+const birthDate = new Date('August 15, 1965 00:00:00');
+```
