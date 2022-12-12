@@ -63,3 +63,8 @@ const tax = 0.18;
 const category = 'T-Shits';
 const birthDate = new Date('August 15, 1965 00:00:00');
 ```
+
+## Nombre de una función
+```
+Verbo + sustantivo, ejmp: createUser(), updateUser(), sendEmail(), etc..
+```
