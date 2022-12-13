@@ -192,3 +192,14 @@ haciendo, es decir, solo métodos relacionados con la intención de la clase.
 - **En bajo acoplamiento**, cambiar algor importante en una clase no debería afectar a la otra.
 - **En alto acoplamiento**, dificultaría el cambio en el mantenimiento de su código; dado que las clases están muy unidas, hacer un cambio podría requerir una renovación completa
 del sistema.
+
+---
+## Principios SOLID
+
+Los 5 principios S.O.L.I.D. de diseño de software son:
+
+- S – Single Responsibility Principle (SRP)
+- O – Open/Closed Principle (OCP)
+- L – Liskov Substitution Principle (LSP)
+- I – Interface Segregation Principle (ISP)
+- D – Dependency Inversion Principle (DIP)
