@@ -22,7 +22,7 @@
 
         public masterEmail: string = 'tiendas-peru@gmail.com';
         sendEmail(emailList: string[], template: 'to-clients' | 'to-admin') {
-            console.log(emailList);            
+            console.log(emailList);
             console.log('Enviando correo a los clientes', template);
         }
 
@@ -32,18 +32,24 @@
     //* Recuerden que podemos tener muchas vistas que realicen este mismo trabajo.
     class ProductBloc {
 
+        private productService: ProductService;
+        private mailer: Mailer;
+
+        constructor(productService: ProductService, mailer: Mailer) {
+            this.productService = productService;
+            this.mailer = mailer;
+        }
+
         loadProduct(id: number) {
-            //* Realiza un proceso para obtener el producto y retornarlo
-            console.log('Producto: ', { id, name: 'OLED Tv' });
+            this.productService.getProduct(id);
         }
 
         saveProduct(product: Product) {
-            //* Realiza una petición para salvar en base de datos 
-            console.log('Guardando en base de datos', product);
+            this.productService.saveProduct(product);
         }
 
         notifyClients() {
-            console.log('Enviando correo a los clientes');
+            this.mailer.sendEmail(['eduardo@gmail.com'], 'to-clients');
         }
 
     }
@@ -59,7 +65,10 @@
 
     }
 
-    const productBloc = new ProductBloc();
+    const productService: ProductService = new ProductService();
+    const mailer: Mailer = new Mailer();
+
+    const productBloc = new ProductBloc(productService, mailer);
     const cartBlock = new CartBlock();
 
     productBloc.loadProduct(10);
