@@ -176,3 +176,19 @@ STUPID: Conjunto de antipatrones que no deberíamos usar. Estos será resueltos 
 - **Premature optimization**: optimizaciones prematuras
 - **Indescriptive Naming**: nombres poco descriptivos
 - **Duplication**: duplicidad de código, no aplicar el principio DRY
+
+# Acoplamiento y cohesión
+```
+Un buen diseño de software tiene una "alta cohesión y un bajo acoplamiento"
+```
+
+**Cohesión**, se refiere a lo que la clase (o módulo) puede hacer.
+- **La baja cohesión**, significaría que la clase realizaría una gran variedad de
+acciones: es amplia, no se enfoca en lo que debe hacer.
+- **La alta cohesión**, significa que la clase se enfoca en lo que debería estar
+haciendo, es decir, solo métodos relacionados con la intención de la clase.
+
+**Acoplamiento**, se refiere a cuán relacionados o dependientes son dos clases o módulos entre sí.
+- **En bajo acoplamiento**, cambiar algor importante en una clase no debería afectar a la otra.
+- **En alto acoplamiento**, dificultaría el cambio en el mantenimiento de su código; dado que las clases están muy unidas, hacer un cambio podría requerir una renovación completa
+del sistema.
