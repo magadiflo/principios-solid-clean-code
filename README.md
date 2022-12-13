@@ -194,7 +194,9 @@ haciendo, es decir, solo métodos relacionados con la intención de la clase.
 del sistema.
 
 ---
+
 ## Principios SOLID
+Los principios SOLID nos indican cómo organizar nuestras funciones y estructuras de datos en componentes y cómo dichos componentes deben estar interconectados.  
 
 Los 5 principios S.O.L.I.D. de diseño de software son:
 
