@@ -161,3 +161,9 @@ class HtmlElement {
 
 }
 ```
+
+---
+
+# Acrónimo - STUPID
+Todo lo que nosotros no deberíamos de hacer.  
+STUPID: Conjunto de antipatrones que no deberíamos usar. Estos será resueltos con los principios SOLID que vienen más adelante.
