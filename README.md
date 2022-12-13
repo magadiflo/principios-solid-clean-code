@@ -104,3 +104,9 @@ Se recomienda limitar a 3 parámetros
 - Menos de 20 líneas
 - Evitar el uso del else
 - Prioriza el uso de la condicional ternaria
+
+## Principio DRY (Don't Repeat Yourself)
+- Evitar tener duplicidad de código.
+- Simplifica las pruebas.
+- Ayuda a centralizar los procesos.
+- Aplicar el principio DRY, usualmente lleva a refactorizar.
