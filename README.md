@@ -166,4 +166,13 @@ class HtmlElement {
 
 # Acrónimo - STUPID
 Todo lo que nosotros no deberíamos de hacer.  
-STUPID: Conjunto de antipatrones que no deberíamos usar. Estos será resueltos con los principios SOLID que vienen más adelante.
+STUPID: Conjunto de antipatrones que no deberíamos usar. Estos será resueltos con los principios SOLID que vienen más adelante.  
+
+6 Code Smells que debemos evitar:
+
+- **Singleton**: patrón singleton
+- **Tight Coupling**: alto acoplamiento
+- **Untestability**: código no probable (unit test)
+- **Premature optimization**: optimizaciones prematuras
+- **Indescriptive Naming**: nombres poco descriptivos
+- **Duplication**: duplicidad de código, no aplicar el principio DRY
