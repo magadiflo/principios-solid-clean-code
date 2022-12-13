@@ -96,3 +96,11 @@ sendEmail('martin@google.com');
 Entonces, quí el valor que le pasamos se llama ARGUMENTO
 ```
 Se recomienda limitar a 3 parámetros
+
+## Funciones
+- Simplicidad es fundamental
+- Funciones de tamaño reducido
+- Funciones de una sola línea sin causar complejidad
+- Menos de 20 líneas
+- Evitar el uso del else
+- Prioriza el uso de la condicional ternaria
