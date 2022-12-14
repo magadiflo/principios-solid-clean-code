@@ -1,4 +1,4 @@
-import { LocalDataBaseService, JsonDataBaseService } from './05-dependency-inversion-c';
+import { PostProvider } from './05-dependency-inversion-c';
 
 export interface Post {
     body: string;
@@ -11,7 +11,7 @@ export class PostService {
 
     private posts: Post[] = [];
 
-    constructor(private postProvider: LocalDataBaseService) { }
+    constructor(private postProvider: PostProvider) { }
 
     //* Dentro de este método tenemos una dependencia oculta,
     //* es decir, una dependencia que no nos es fácil detectarla hasta que veamos el método getPosts()

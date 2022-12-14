@@ -1,12 +1,14 @@
 import { PostService } from './05-dependency-inversion-b';
-import { JsonDataBaseService, LocalDataBaseService } from './05-dependency-inversion-c';
+import { JsonDataBaseService, LocalDataBaseService, WebApiPostService } from './05-dependency-inversion-c';
 
 //* Main
 (async () => {
 
-    const provider = new LocalDataBaseService();
+    const providerLocal = new LocalDataBaseService();
+    const providerJson = new JsonDataBaseService();
+    const providerWebApi = new WebApiPostService();
 
-    const postService = new PostService(provider);
+    const postService = new PostService(providerWebApi);
 
     const posts = await postService.getPosts();
 
