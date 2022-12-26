@@ -175,7 +175,7 @@ STUPID: Conjunto de antipatrones que no deberíamos usar. Estos será resueltos 
 - **Untestability**: código no probable (unit test)
 - **Premature optimization**: optimizaciones prematuras
 - **Indescriptive Naming**: nombres poco descriptivos
-- **Duplication**: duplicidad de código, no aplicar el principio DRY
+- **Duplication**: duplicidad de código, aplicar el principio DRY
 
 # Acoplamiento y cohesión
 ```
@@ -205,3 +205,156 @@ Los 5 principios S.O.L.I.D. de diseño de software son:
 - L – Liskov Substitution Principle (LSP)
 - I – Interface Segregation Principle (ISP)
 - D – Dependency Inversion Principle (DIP)
+
+
+# [Code Quality en Angular](https://www.youtube.com/watch?v=FUs5VsdT2gg&list=PLy09ETjgu8VqKGRs1UFq3ZiFbY0zzhdLr&index=7)
+### ¿Cómo escribir código limpio?
+Aplicando alguno de los principios generales de diseño de clean code.
+
+- **KISS**: Keep It Simple Stupid (Mantenlo siempre estúpido). Tratar en lo posible de refactorizar el código para que sea lo más simple de tal forma
+que se pueda entender el código.
+- **DRY**: Don't Repeat Yourself (no repitas). No debemos repetir elementos, *ejmp. código, archivos, carpetas, clases, componentes, etc.* Lo que debemos
+hacer es reutilizable los elementos. Crea una vez, y luego reutiliza.
+- **YAGNI**: You Aren't Gonna Need It. (no lo vas a necesitar). Siempre implemente las cosas cuando realmente las necesite, nunca cuando preveea que las necesitará.
+- **Readable Before Concise**: legible antes que conciso. El código no solo dbe funcionar y ser interpretado por la máquina que lo ejecuta, sino *también debe ser comprensible para otros desarrolladores*.
+
+# Buenas prácticas en Angular
+## 01. Estructura de Proyecto
+### Estructura de carpetas
+En angular organizamos nuestros componentes a base de módulos, así que es una decisión crítica qué estrategia de módulos usar según el proyecto a realizar.  
+Veamos qué opciones tenermos:
+- Todo en un módulo
+- Un módulo por componente
+- Un módulo por característica o vista (recomendado por la documentación oficial de Angular)
+
+*Recuerden que no existe una única manera de estructurar tus carpetas, lo único que hay son recomendaciones en base al estudio y experiencia en múltiples proyectos*  
+
+A continuación, [LogiDev 35:29 min](https://www.youtube.com/watch?v=FUs5VsdT2gg&list=PLy09ETjgu8VqKGRs1UFq3ZiFbY0zzhdLr&index=7) muestra como recomendación la estructura de carpetas que usa en sus proyectos de Angular.
+
+**/src/app**, define cómo quiere estructurar sus carpetas bases: /business, /commons, /pages
+```
+src/
+    /app
+        /business
+        /commons
+        /pages
+        app-routing.module.ts
+        app.component.html
+        app.component.scss
+        app.component.ts
+        app.module.ts
+```
+
+**/pages**, representa las rutas (páginas) que existen en mi web, con esto el desarrollador podrá identificar más rápido dónde es que debe empezar sus actividades.  
+Estos componentes se encargan de **mostrar información** y realizar **tareas muy básicas**. **No es que estos componentes van a realizar la lógica de negocio, de realizar peticiones http.**
+```
+/pages
+    /login-page
+    /register-page
+    /dashboard-page
+        /category-page
+        /product-page
+        /sales-page
+```
+
+**/commons**, aquí irán los artefactos que serán comunes y reutilizables en toda la aplicación: **componentes, services, pipes, etc**.
+```
+/commons
+    /components
+    /pipes
+    /models
+    /services
+    /shared
+```
+
+**/business**, en esta carpeta se distribuyen los flujos del negocio.
+```
+/business
+    /sales
+        /commons
+        /sales-user-flow
+            /commons
+        /sales-admin-flow
+            /commons
+    /maintenance
+        /product-flow
+        /category-flow
+    /auth
+        /login-flow
+        /register-flow
+```
+
+### Single Responsability Principle (SRP) en archivos
+Principio de Responsabilidad única aplicada en archivos, cada uno tiene un único propósito.
+- Components
+- Services
+- Pipes
+- Directives
+- Guards
+- Interceptors
+- etc.
+
+### Nombre de archivos y carpetas
+Seguir un mismo patrón, primero va la **característica del archivo** seguido del **tipo**, separado por un punto:
+- container.component.ts
+- container.component.html
+
+En caso el nombre sea compuesto debemos usar **"-"**:
+- login-page.component.ts
+- recovery-password-page.component.html
+
+El nombre de una carpeta debe describir su contenido:
+```
+/shared
+    /components
+    /modules
+        shared-form-basic.modules.ts
+        shared-form-complete.module.ts
+```
+
+### Uso de path alias
+Con esto simplificamos las rutas y hacemos que el código sea más fácil de leer y mantener.
+
+```
+import { IUser } from '../../../../models/user.interface';
+import { Navigationervice } from '../../../services/navigation/navigation.service';
+```
+
+Para ello debemos de configurar nuestro **tsconfig.ts**, dentro del atributo **"compilerOptions"**.
+```
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths:" {
+        "@models-interface/*": ["src/app/commons/models/interfaces/*"],
+        "@services/*": ["src/app/commons/services/*"],
+        "@services-navigation/*": ["src/app/commons/services/services-navigation/*"]
+    },
+  },
+}
+```
+```
+import { IUser } from '@models-interface/user.interface';
+import { NavigationService } from '@services-navigation/navigation.service';
+```
+
+### SRP en Componentes
+Los componentes grandes añaden complejidad, por ello debemos dividirlos en pequeños componentes, seto simplifica su mantenimiento y pruebas unitarias.
+
+#### SMART and DUMB components
+Antes de crear un componente debemos medir su complejidad.
+
+**SMART**
+- Ejecutan lógica de negocio
+- Gestionan datos
+- Realizan comunicación hacia abajo
+- Manejan / gestionan hacia arriba
+
+**DUMB**
+- Reciben datos y los presentan (@Input)
+- Emiten eventos (@Output)
+
+### Usar un gestor de estados (solo si el proyecto lo amerita)
+**¿Qué es el estado?** básicamente se refiere al valor de las variables de nuestros componentes (o aplicación) en un momento determinado. Cuando los valores cambian, el estado **"muta"**.
+
+**Redux:** es el patrón de arquitectura de datos que implementa el flujo de la información sencillo y predecible, adoptado por numerosos frameworks y aplicaciones avanzadas.
