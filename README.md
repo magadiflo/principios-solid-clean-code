@@ -502,7 +502,11 @@ ngOnInit(): void {
 ```
 
 - ConcatMap(...), cuando necesitamos que un observable se resuelva primero para que a partir del dato devuelto podamos hacer el llamado a otro observable.  
-Sería recomendable usar ConcatMap() sobre SwitchMap(), ya que [el SwitchMap() puede resultar peligroso según esta página](https://medium.com/dottech/todo-sobre-switchmap-y-compa%C3%B1%C3%ADa-2af03cedc2be)
+Sería recomendable usar ConcatMap() sobre SwitchMap(), ya que [el SwitchMap() puede resultar peligroso según esta página](https://medium.com/dottech/todo-sobre-switchmap-y-compa%C3%B1%C3%ADa-2af03cedc2be), aunque si solo son peticiones que traerán información del backend no habría problemas en usarlos ya
+que el funcionamiento original del SwithMap() es cancelar la peticiones cuando el origen de datos emite una nueva petición, **pero** esa cancelación es a nivel
+de usuario, la petición por debajo se hará de todas maneras al backend, así que si esa petición incluye en el backend realizar alguna modificación, lo hará, así 
+el usuario haya cancelado desde el front, ya que esa cancelación de la petición ocurre únicamente a nivel del usuario, por eso era lo de **tener mucho cuidado**
+con el uso del SwitchMap()
 ```
 constuctor(private _apiService: ApiService){}
 
