@@ -358,3 +358,178 @@ Antes de crear un componente debemos medir su complejidad.
 **¿Qué es el estado?** básicamente se refiere al valor de las variables de nuestros componentes (o aplicación) en un momento determinado. Cuando los valores cambian, el estado **"muta"**.
 
 **Redux:** es el patrón de arquitectura de datos que implementa el flujo de la información sencillo y predecible, adoptado por numerosos frameworks y aplicaciones avanzadas.
+
+--- 
+
+## 02. Sintaxis
+### Guía de estilos de Angular
+- Máximo de 400 líneas por archivo
+- Máximo 75 líneas por método
+- Convención de nombre de ficheros y clases
+- Organizar dentro de la clase
+- Const vs let
+
+### Aprovechar las características de ES6 y TypeScript
+- Funciones de flecha (arrow function)
+- Template string
+- Herencias
+- Strict type
+- Abastracts
+- Generic Types
+- Spread operator
+- Ambitos de bloque en variables y constantes
+
+```
+Generic Type Example
+--------------------
+export interface IResponse<T = void> {
+    data: T;
+    success: boolean,
+    errorMessage: string;
+}
+```
+
+### Diferenciar públicos y privados
+Se debe poder distinguir los métodos, funciones y variables públicas y privadas dentro de un componente, de esta manera será más fácil saber quienes interactúan con el HTML.
+```
+//* Podemos usar el _ (guión bajo) para decir que es una variable, función o método privado, y el resto será público.
+
+constructor(private _userApiService: UserApiService, private _formBuilder: FormBuilder, private _router: Router){}
+```
+
+### Usar pipes en vez de métodos directo en el HTML
+Si llamas a un método o función directamente en el HTML, este se ejecutará cada vez que se vuelva a renderizar el componente, incluso con la detección onPush, eso significará
+que se activará cada vez que haya interacción con el componente o cualquier elemento secundario del componente (hacer click, escribir).
+
+### Usar "CONST" al crear un ENUM
+En la mayoría de los casos, los enums son una solución perfectamente válida. Sin embargo, a veces los requisitos son más estrictos.
+```
+const enum STATUS {
+    "PENDIENTE" = 1,
+    "AUTORIZADO" = 2,
+    "CANCELADO" = 3
+}
+```
+
+### Centralizar los valores globales
+- Nombre de rutas
+- Identificadores de Storage Web (LocalStorage, SessionStorage, Cookies, etc.)
+- URL Públicas
+
+#### Optimizar la detección de cambios
+Cada componente tiene asociado un detector de cambios. Angular puede detectar cuándo cambian los datos de los componentes y luego volver a renderizar automáticamente la vista para reflejar ese cambio.
+
+#### Prevenir memory leaks (pérdida de memoria)
+**Memory leak**, es memoria que ya no se utiliza pero no se libera. Esto lo vemos en los Observables, creamos un memory leak si no nos de-subscribimos al destruir el componente.  
+Tres maneras de prevenir los memory leaks:
+
+- TAKE UNTIL
+```
+export class HeaderComponent implements OnInit, OnDestroy {
+    private readonly destroy$ = new Subject();
+
+    constructor(private _apiService: ApiService){}
+
+    ngOnInit(): void {
+        this._apiService.channel$
+            .pipe(
+                finalize(() => console.log('-Finalize-')),
+                takeUntil(this.destroy$)
+            )
+            .subscribe(data => console.log(data));
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next(true);
+        this.destroy$.complete();
+    }
+}
+```
+- CAPTURE SUBSCRIPTION
+```
+export class HeaderComponent implements OnInit, OnDestroy {
+    private _subscription!: Subscription;
+
+    constructor(private _apiService: ApiService){}
+
+    ngOnInit(): void {
+        this._subscription = this._apiService.channel$
+            .subscribe(data => console.log(data));
+    }
+
+    ngOnDestroy(): void {
+        this._subscription.unsubscribe();
+    }
+}
+```
+- ASYNC PIPE, el pipe ASYNC mata automáticamente la subscripción por nosotros.
+```
+<li *ngFor="let item of myService.getItems() | async">{{ item.name }}</li>
+```
+
+#### Evitar las subscripciones anidadas
+- Esto funciona, pero no sería recomendable
+```
+constuctor(private _apiService: ApiService){}
+
+ngOnInit(): void {
+    this._apiService.getPokemonDitto()
+        .subscribe(responseDitto => {
+            console.log(responseDitto);
+
+            this._apiService.getPokemonCharizard()
+                .subscribe(responseCharizard => {
+                    console.log(responseCharizard);
+                });
+        });
+}
+```
+
+- CombineLatest(...), Cuando tengamos dos o más peticiones anidadas sin importarnos el orden de las peticiones, es decir no existe dependencia entre una petición y otra.
+```
+constuctor(private _apiService: ApiService){}
+
+ngOnInit(): void {
+    combineLatest([
+        this._apiService.getPokemonDitto(),
+        this._apiService.getPokemonCharizard(),
+    ])
+    .subscribe(([responseDitto, responseCharizard]) => {
+        console.log(responseDitto);
+        console.log(responseCharizard);
+    });
+}
+```
+
+- ConcatMap(...), cuando necesitamos que un observable se resuelva primero para que a partir del dato devuelto podamos hacer el llamado a otro observable.  
+Sería recomendable usar ConcatMap() sobre SwitchMap(), ya que [el SwitchMap() puede resultar peligroso según esta página](https://medium.com/dottech/todo-sobre-switchmap-y-compa%C3%B1%C3%ADa-2af03cedc2be)
+```
+constuctor(private _apiService: ApiService){}
+
+ngOnInit(): void {
+    this._apiService.getPokemonDitto()
+        .pipe(
+            concatMap((response) => {
+                console.log(response);
+                return this._apiService.getPokemonCharizard(response.id);
+            })
+        )
+        .subscribe(responseCharizard => {
+            console.log(responseCharizard);
+        });
+}
+```
+
+#### TrackBy ngFor
+Al usar **ngFor** y actualizar la lista, Angular eliminará de manera predeterminada toda la lista del DOM y la creará nuevamente, porque no tiene forma, de manera predeterminada,
+de saber qué elemento se agregó o eliminó de la lista. 
+
+La función **trackBy** nos ayudará a lidiar con esto.
+
+```
+<li *ngFor="let pokemon of listPokemons; trackBy: identifyPokemon">{{ pokemon.name }}</li>
+
+identifyPokemon(_index: number, pokemon: IPokemon): number {
+    return pokemon.id;
+}
+```
